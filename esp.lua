@@ -2,7 +2,7 @@
 -- Modified by Alumark
 -- Thank you so much Cri for making this, amazing esp library.  Much better than the others.
 
-local OwlESP = {};
+local ESP = {};
 
 local localPlayer = game:GetService("Players").LocalPlayer;
 local currentCamera = workspace.CurrentCamera;
