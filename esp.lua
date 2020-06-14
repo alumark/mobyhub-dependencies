@@ -15,7 +15,7 @@ local tracerStart = newVector2(currentCamera.ViewportSize.X / 2, currentCamera.V
 
 function OwlESP.new(data)
     local self = setmetatable({
-        name = {data.name, data.text}
+        name = {data.name, data.text or data.name}
         part = data.part,
         espBox = nil,
         name = nil,
@@ -86,7 +86,6 @@ local Teams = game:GetService("Teams")
 function OwlESP:update()
     local char, espBox, tracer, name = self.part, self.espBox[1], self.tracer[1], self.name[1];
     local espBoxVisible, tracerVisible, text, espColor = self.espBox[2], self.tracer[2], self.name[2], self.espColor;
-    local rootPart, head = char:FindFirstChild("HumanoidRootPart"), char:FindFirstChild("Head");
 
     
     if #Teams > 0 then
@@ -97,7 +96,7 @@ function OwlESP:update()
 
     if rootPart and head then
         local rootPos, rootVis = worldToViewportPoint(currentCamera, rootPart.Position);
-        local headPos = worldToViewportPoint(currentCamera, head.Position + headOffset);
+        local headPos = worldToViewportPoint(currentCamera, part.Position + headOffset);
         local legPos = worldToViewportPoint(currentCamera, rootPart.Position - legOffset);
         local visible = (self.teamCheck and plr.TeamColor ~= localPlayer.TeamColor) or (not self.teamCheck);
 
