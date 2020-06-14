@@ -87,18 +87,21 @@ function OwlESP:update()
     local char, espBox, tracer, name = self.part, self.espBox[1], self.tracer[1], self.name[1];
     local espBoxVisible, tracerVisible, text, espColor = self.espBox[2], self.tracer[2], self.name[2], self.espColor;
 
-    
-    if #Teams > 0 then
-        self.teamCheck = true
+    if self.plr then
+        if #Teams > 0 then
+            self.teamCheck = true
+        else
+            self.teamCheck = false
+        end
     else
         self.teamCheck = false
     end
 
     if rootPart and head then
         local rootPos, rootVis = worldToViewportPoint(currentCamera, rootPart.Position);
-        local headPos = worldToViewportPoint(currentCamera, part.Position + headOffset);
+        local headPos = worldToViewportPoint(currentCamera, rootPart.Position + headOffset);
         local legPos = worldToViewportPoint(currentCamera, rootPart.Position - legOffset);
-        local visible = (self.teamCheck and plr.TeamColor ~= localPlayer.TeamColor) or (not self.teamCheck);
+        local visible = (self.plr and self.teamCheck and plr.TeamColor ~= localPlayer.TeamColor) or (not self.plr) or (not self.teamCheck);
 
         if rootVis then
             espBox.Size = newVector2(2350 / rootPos.Z, headPos.Y - legPos.Y);
