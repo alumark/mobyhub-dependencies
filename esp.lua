@@ -1,3 +1,7 @@
+-- by CriShoux
+-- Modified by Alumark
+-- Thank you so much Cri for making this, amazing esp library.  Much better than the others.
+
 local OwlESP = {};
 
 local localPlayer = game:GetService("Players").LocalPlayer;
@@ -13,9 +17,8 @@ local headOffset = newVector3(0, 0.5, 0);
 local legOffset = newVector3(0, 3, 0);
 local tracerStart = newVector2(currentCamera.ViewportSize.X / 2, currentCamera.ViewportSize.Y);
 
-function OwlESP.new(data)
+function ESP.new(data)
     local self = setmetatable({
-        name = {data.name, data.text or data.name}
         part = data.part,
         espBox = nil,
         name = nil,
@@ -24,17 +27,17 @@ function OwlESP.new(data)
         teamCheck = data.teamCheck or false;
     }, {__index = OwlESP});
 
-    local plr = data.name;
+    local plr = data.plr;
     local rootPart = data.part;
     local espBoxVisible = data.espBoxVisible;
     local tracerVisible = data.tracerVisible;
-    local text = data.text;
+    local text = data.text or data.name;
 
     
     local rootPos, rootVis = worldToViewportPoint(currentCamera, rootPart.Position);
-    local headPos = worldToViewportPoint(currentCamera, head.Position + headOffset);
+    local headPos = worldToViewportPoint(currentCamera, rootPart.Position + headOffset);
     local legPos = worldToViewportPoint(currentCamera, rootPart.Position - legOffset);
-    local visible = (self.teamCheck and plr.TeamColor ~= localPlayer.TeamColor) or (not self.teamCheck);
+    local visible = (self.plr and self.teamCheck and plr.TeamColor ~= localPlayer.TeamColor) or (not self.plr) or (not self.teamCheck);
 
     local espBox = newDrawing("Square");
     espBox.Color = self.espColor;
@@ -67,24 +70,25 @@ function OwlESP.new(data)
     self.espBox = {espBox, espBoxVisible};
     self.tracer = {tracer, tracerVisible};
 
+    self.name = {name, data.text or data.name}
     return self;
 end;
 
-function OwlESP:setESPBox(visible)
+function ESP:setESPBox(visible)
     self.espBox[2] = visible;
 end;
 
-function OwlESP:setTracer(visible)
+function ESP:setTracer(visible)
     self.tracer[2] = visible;
 end;
 
-function OwlESP:setText(text)
+function ESP:setText(text)
     self.name[2] = text;
 end;
 
 local Teams = game:GetService("Teams")
-function OwlESP:update()
-    local char, espBox, tracer, name = self.part, self.espBox[1], self.tracer[1], self.name[1];
+function ESP:update()
+    local rootPart, espBox, tracer, name = self.part, self.espBox[1], self.tracer[1], self.name[1];
     local espBoxVisible, tracerVisible, text, espColor = self.espBox[2], self.tracer[2], self.name[2], self.espColor;
 
     if self.plr then
@@ -97,11 +101,11 @@ function OwlESP:update()
         self.teamCheck = false
     end
 
-    if rootPart and head then
+    if rootPart then
         local rootPos, rootVis = worldToViewportPoint(currentCamera, rootPart.Position);
         local headPos = worldToViewportPoint(currentCamera, rootPart.Position + headOffset);
         local legPos = worldToViewportPoint(currentCamera, rootPart.Position - legOffset);
-        local visible = (self.plr and self.teamCheck and plr.TeamColor ~= localPlayer.TeamColor) or (not self.plr) or (not self.teamCheck);
+        local visible = (self.plr and self.teamCheck and self.plr.TeamColor ~= localPlayer.TeamColor) or (not self.plr) or (not self.teamCheck);
 
         if rootVis then
             espBox.Size = newVector2(2350 / rootPos.Z, headPos.Y - legPos.Y);
@@ -125,12 +129,11 @@ function OwlESP:update()
     end;
 end;
 
-function OwlESP:remove()
+function ESP:remove()
     self.espBox[1]:Remove();
     self.tracer[1]:Remove();
     self.name[1]:Remove();
     function self:update() end;
 end;
 
-return OwlESP;
- 
+return ESP;
