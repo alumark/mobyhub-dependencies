@@ -15,8 +15,8 @@ local tracerStart = newVector2(currentCamera.ViewportSize.X / 2, currentCamera.V
 
 function OwlESP.new(data)
     local self = setmetatable({
-        plr = data.plr,
-        char = data.plr.Character,
+        name = {data.name, data.text}
+        part = data.part,
         espBox = nil,
         name = nil,
         tracer = nil,
@@ -24,16 +24,13 @@ function OwlESP.new(data)
         teamCheck = data.teamCheck or false;
     }, {__index = OwlESP});
 
-    local plr = data.plr;
-    local char = self.char;
+    local plr = data.name;
+    local rootPart = data.part;
     local espBoxVisible = data.espBoxVisible;
     local tracerVisible = data.tracerVisible;
     local text = data.text;
 
-    if not char then return; end;
-
-    local rootPart = char.HumanoidRootPart;
-    local head = char.Head;
+    
     local rootPos, rootVis = worldToViewportPoint(currentCamera, rootPart.Position);
     local headPos = worldToViewportPoint(currentCamera, head.Position + headOffset);
     local legPos = worldToViewportPoint(currentCamera, rootPart.Position - legOffset);
@@ -69,7 +66,6 @@ function OwlESP.new(data)
 
     self.espBox = {espBox, espBoxVisible};
     self.tracer = {tracer, tracerVisible};
-    self.name = {name, text};
 
     return self;
 end;
@@ -86,10 +82,18 @@ function OwlESP:setText(text)
     self.name[2] = text;
 end;
 
+local Teams = game:GetService("Teams")
 function OwlESP:update()
-    local plr, char, espBox, tracer, name = self.plr, self.char, self.espBox[1], self.tracer[1], self.name[1];
+    local char, espBox, tracer, name = self.part, self.espBox[1], self.tracer[1], self.name[1];
     local espBoxVisible, tracerVisible, text, espColor = self.espBox[2], self.tracer[2], self.name[2], self.espColor;
     local rootPart, head = char:FindFirstChild("HumanoidRootPart"), char:FindFirstChild("Head");
+
+    
+    if #Teams > 0 then
+        self.teamCheck = true
+    else
+        self.teamCheck = false
+    end
 
     if rootPart and head then
         local rootPos, rootVis = worldToViewportPoint(currentCamera, rootPart.Position);
