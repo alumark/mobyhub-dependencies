@@ -94,7 +94,7 @@ function ESP:update()
     local espBoxVisible, tracerVisible, text, espColor = self.espBox[2], self.tracer[2], self.name[2], self.espColor;
 
     if self.plr then
-        if #Teams > 0 then
+        if #Teams:GetTeams() > 0 then
             self.teamCheck = true
         else
             self.teamCheck = false
