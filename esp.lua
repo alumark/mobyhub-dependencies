@@ -69,8 +69,8 @@ function ESP.new(data)
 
     self.espBox = {espBox, espBoxVisible};
     self.tracer = {tracer, tracerVisible};
-
     self.name = {name, data.text or data.name}
+    
     return self;
 end;
 
