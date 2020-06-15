@@ -20,6 +20,7 @@ local tracerStart = newVector2(currentCamera.ViewportSize.X / 2, currentCamera.V
 function ESP.new(data)
     local self = setmetatable({
         part = data.part,
+        plr = data.plr,
         espBox = nil,
         name = nil,
         tracer = nil,
