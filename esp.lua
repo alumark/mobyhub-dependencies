@@ -30,8 +30,8 @@ function ESP.new(data)
 
     local plr = data.plr;
     local rootPart = data.part;
-    local espBoxVisible = data.espBoxVisible or true;
-    local tracerVisible = data.tracerVisible or true;
+    local espBoxVisible = data.espBoxVisible or false;
+    local tracerVisible = data.tracerVisible or false;
     local text = data.text or data.name;
 
     
