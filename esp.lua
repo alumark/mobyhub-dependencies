@@ -25,12 +25,12 @@ function ESP.new(data)
         tracer = nil,
         espColor = data.espColor or fromRGB(255, 255, 255),
         teamCheck = data.teamCheck or false;
-    }, {__index = OwlESP});
+    }, {__index = ESP});
 
     local plr = data.plr;
     local rootPart = data.part;
-    local espBoxVisible = data.espBoxVisible;
-    local tracerVisible = data.tracerVisible;
+    local espBoxVisible = data.espBoxVisible or true;
+    local tracerVisible = data.tracerVisible or true;
     local text = data.text or data.name;
 
     
@@ -62,6 +62,7 @@ function ESP.new(data)
         tracer.To = newVector2(rootPos.X, rootPos.Y - espBox.Size.Y / 2);
         name.Position = newVector2(rootPos.X, (rootPos.Y + espBox.Size.Y / 2) - 25);
 
+        print(visible)
         espBox.Visible = espBoxVisible and visible;
         tracer.Visible = tracerVisible and visible;
         name.Visible = espBoxVisible and visible;
