@@ -96,7 +96,7 @@ function ESP:update()
     if self.plr then
         if #Teams:GetTeams() > 0 then
             local teamColor = self.plr.TeamColor
-            espColor = Color3.fromRGB(teamColor.r, teamColor.g, teamColor.b)
+            espColor = Color3.new(teamColor.r, teamColor.g, teamColor.b)
         end
     end
 
