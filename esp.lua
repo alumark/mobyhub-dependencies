@@ -95,12 +95,9 @@ function ESP:update()
 
     if self.plr then
         if #Teams:GetTeams() > 0 then
-            self.teamCheck = true
-        else
-            self.teamCheck = false
+            local teamColor = self.plr.TeamColor
+            espColor = Color3.new(teamColor.r, teamColor.g, teamColor.b)
         end
-    else
-        self.teamCheck = false
     end
 
     if rootPart then
